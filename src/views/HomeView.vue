@@ -11,22 +11,38 @@ const state = reactive({
     <div class="modal">
       <div class="modal-content">
         <div class="modal-header">
-            <div class="modal-header-content">How many people?</div>
-            <div class="modal-header-cross-icon" @click="state.showModal = false">
-                <i class="fas fa-times"></i>
-            </div>
+          <div class="modal-header-content">How many people?</div>
+          <div class="modal-header-cross-icon" @click="state.showModal = false">
+            <i class="fas fa-times"></i>
+          </div>
         </div>
 
-        
-        <input type="number" v-model.number="state.peopleCount" min="20" max="100" />
+        <div class="horizontal-rule">
+          <hr />
+        </div>
+
+        <div class="modal-input">
+          <div class="modal-input-label">
+            <p>Enter the number of how many people you want to add to the list.</p>
+          </div>
+
+          <div class="modal-input-field">
+            <input type="number" v-model="state.peopleCount" />
+          </div>
+        </div>
+
+        <div class="horizontal-rule">
+          <hr />
+        </div>
       </div>
 
       <div class="modal-buttons">
-        <div class="start-btn" @click="startGame">
-          <button @click="startGame">Start</button>
-        </div>
         <div class="cancel-btn">
           <button @click="state.showModal = false">Cancel</button>
+        </div>
+
+        <div class="start-btn" @click="startGame">
+          <button @click="startGame">Start</button>
         </div>
       </div>
     </div>
@@ -52,7 +68,6 @@ const state = reactive({
   top: 22px;
   gap: 0px;
   border-radius: 5px 0px 0px 0px;
-  opacity: 0px;
   background-color: white;
   position: relative;
   padding: 20px;
@@ -62,24 +77,58 @@ const state = reactive({
   border-radius: 10px;
 }
 
+.horizontal-rule {
+  hr {
+    width: 100%;
+    border: 1px solid #cccccc;
+  }
+}
 .modal-header {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 
-    .modal-header-content {
-        font-size: 20px;
-        font-weight: 600;
-        line-height: 27px;
+  .modal-header-content {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+  }
+
+  .modal-header-cross-icon {
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: relative;
+    top: 8px;
+    color: #999999;
+  }
+}
+
+.modal-input {
+  margin-top: 20px;
+  margin-bottom: 50px;
+
+  .modal-input-label {
+    p {
+      font-size: 16px;
+      margin-left: 10px;
+      font-weight: 400;
+      line-height: 22px;
+      color: #555555;
     }
+  }
 
-    .modal-header-cross-icon {
-        cursor: pointer;
-        width: 12px;
-        height: 12px;
-        position: relative;
-        top: 8px;
-
+  .modal-input-field {
+    input {
+      width: 400px;
+      height: 40px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+      margin-top: 10px;
+      padding-left: 14px;
+      margin-left: 10px;
     }
+  }
 }
 
 .modal-buttons {
@@ -92,13 +141,12 @@ const state = reactive({
   button {
     width: 78px;
     height: 40px;
-    top: 244px;
-    left: 339px;
-    gap: 0px;
-    opacity: 0px;
     background-color: #f68d03;
     color: white;
     border-radius: 10px;
+    border-color: transparent;
+    font-size: 14px;
+    line-height: 18px;
   }
 }
 
@@ -106,13 +154,13 @@ const state = reactive({
   button {
     width: 88px;
     height: 40px;
-    top: 244px;
-    left: 241px;
-    gap: 0px;
-    opacity: 0px;
     background-color: #eeeeee;
     color: #555555;
     border-radius: 10px;
+    border-color: transparent;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 700;
   }
 }
 </style>
