@@ -63,6 +63,7 @@ const state = reactive({
 }
 
 .modal {
+  font-family: 'Roboto', sans-serif;
   width: 437px;
   height: 282px;
   top: 22px;
@@ -110,7 +111,7 @@ const state = reactive({
 
   .modal-input-label {
     p {
-      font-size: 16px;
+      font-size: 14px;
       margin-left: 10px;
       font-weight: 400;
       line-height: 22px;
