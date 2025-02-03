@@ -6,6 +6,10 @@ const state = reactive({
   showModal: false,
   peopleCount: 20,
 })
+
+const startGame = () => {
+  console.log('Game started!', state.peopleCount)
+}
 </script>
 
 <template>
@@ -27,6 +31,8 @@ const state = reactive({
         :showModal="state.showModal"
         :peopleCount="state.peopleCount"
         @update:showModal="state.showModal = $event"
+        @update:peopleCount="state.peopleCount = $event"
+        @update:startGame="startGame"
       />
     </div>
   </div>

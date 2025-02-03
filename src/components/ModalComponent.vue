@@ -14,6 +14,12 @@ export default {
     closeModal() {
       this.$emit('update:showModal', false)
     },
+    updatePeopleCount(event) {
+      this.$emit('update:peopleCount', Number(event.target.value))
+    },
+    startGame() {
+      this.$emit('update:startGame')
+    },
   },
 }
 </script>
@@ -37,9 +43,9 @@ export default {
           <p>Enter the number of how many people you want to add to the list.</p>
         </div>
 
-        <!-- <div class="modal-input-field">
-            <input type="number" v-model="peopleCount" />
-          </div> -->
+        <div class="modal-input-field">
+          <input type="number" :value="peopleCount" @input="updatePeopleCount" />
+        </div>
       </div>
 
       <div class="horizontal-rule">
