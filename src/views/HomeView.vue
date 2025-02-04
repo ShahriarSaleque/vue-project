@@ -68,7 +68,6 @@ const checkIfSorted = () => {
     clearInterval(interval)
     state.gameStarted = false
     state.showSuccessModal = true
-    console.log('Time taken:', state.timer, 'seconds')
   }
 }
 
