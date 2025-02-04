@@ -90,12 +90,4 @@ export default {
 .sortable-table tbody tr:first-child td {
   border-top: none;
 }
-
-/* Checkbox styling */
-input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  accent-color: #ff7d30;
-}
 </style>
