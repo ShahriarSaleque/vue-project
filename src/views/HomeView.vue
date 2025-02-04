@@ -5,11 +5,19 @@ import { faker } from '@faker-js/faker'
 import ModalComponent from '@/components/ModalComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 
+export type Person = {
+  id: number
+  name: string
+  email: string
+  potatoes: number
+}
+
 const state = reactive({
   showModal: false,
   peopleCount: 20,
-  people: [] as Array<{ id: number; name: string; email: string; potatoes: number }>,
+  people: [] as Array<Person>,
   gameStarted: false,
+  draggingPerson: null as Person | null,
 })
 
 const startGame = () => {
@@ -35,6 +43,19 @@ const generatePeople = () => {
     potatoes: i + 1,
   })).sort(() => Math.random() - 0.5)
 }
+
+const dropEvent = (targetPerson: Person) => {
+  console.log('drop', targetPerson)
+
+  if (state.draggingPerson) {
+    const draggingIndex = state.people.indexOf(state.draggingPerson)
+    const targetIndex = state.people.indexOf(targetPerson)
+
+    // swap the person in dragging index with the person in target index
+    state.people.splice(draggingIndex, 1)
+    state.people.splice(targetIndex, 0, state.draggingPerson)
+  }
+}
 </script>
 
 <template>
@@ -52,7 +73,11 @@ const generatePeople = () => {
       </div>
 
       <div v-if="state.gameStarted">
-        <TableComponent :people="state.people" />
+        <TableComponent
+          :people="state.people"
+          @update:dragStart="state.draggingPerson = $event"
+          @update:drop="dropEvent($event)"
+        />
       </div>
     </div>
 

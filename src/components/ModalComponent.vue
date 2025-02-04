@@ -14,7 +14,8 @@ export default {
     closeModal() {
       this.$emit('update:showModal', false)
     },
-    updatePeopleCount(event) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updatePeopleCount(event: any) {
       this.$emit('update:peopleCount', Number(event.target.value))
     },
     startGame() {
