@@ -1,20 +1,45 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { faker } from '@faker-js/faker'
+
 import ModalComponent from '@/components/ModalComponent.vue'
+import TableComponent from '@/components/TableComponent.vue'
 
 const state = reactive({
   showModal: false,
   peopleCount: 20,
+  people: [] as Array<{ id: number; name: string; email: string; potatoes: number }>,
+  gameStarted: false,
 })
 
 const startGame = () => {
-  console.log('Game started!', state.peopleCount)
+  // make sure the people count is between 20 and 100
+  if (state.peopleCount < 20 || state.peopleCount > 100) {
+    alert('Please enter a number between 20 and 100')
+    return
+  }
+
+  generatePeople()
+
+  // close the modal
+  state.showModal = false
+  state.gameStarted = true
+}
+
+const generatePeople = () => {
+  // randomly generate and asign people
+  state.people = Array.from({ length: state.peopleCount }, (_, i) => ({
+    id: i,
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    potatoes: i + 1,
+  })).sort(() => Math.random() - 0.5)
 }
 </script>
 
 <template>
   <div id="app">
-    <div class="table">
+    <div class="table-component">
       <div class="table-header">
         <div class="table-header-content">
           <p>Sorting Training System</p>
@@ -25,7 +50,12 @@ const startGame = () => {
           </div>
         </div>
       </div>
+
+      <div v-if="state.gameStarted">
+        <TableComponent :people="state.people" />
+      </div>
     </div>
+
     <div v-if="state.showModal" class="modal-overlay">
       <ModalComponent
         :showModal="state.showModal"
@@ -59,7 +89,7 @@ const startGame = () => {
   align-items: center;
 }
 
-.table {
+.table-component {
   font-family: Roboto;
 
   .table-header {
