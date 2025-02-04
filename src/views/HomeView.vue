@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onUnmounted } from 'vue'
 import { faker } from '@faker-js/faker'
 
 import ModalComponent from '@/components/ModalComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
+import SuccessModal from '@/components/SuccessModal.vue'
 
 export type Person = {
   id: number
@@ -18,7 +19,12 @@ const state = reactive({
   people: [] as Array<Person>,
   gameStarted: false,
   draggingPerson: null as Person | null,
+  sortedPeople: [] as Array<Person>,
+  timer: 0,
+  showSuccessModal: false,
 })
+
+let interval: number
 
 const startGame = () => {
   // make sure the people count is between 20 and 100
@@ -31,7 +37,15 @@ const startGame = () => {
 
   // close the modal
   state.showModal = false
+
+  // start the game by setting the gameStarted to true and show table
   state.gameStarted = true
+
+  // start timer
+  state.timer = 0
+  interval = setInterval(() => {
+    state.timer++
+  }, 1000)
 }
 
 const generatePeople = () => {
@@ -42,11 +56,23 @@ const generatePeople = () => {
     email: faker.internet.email(),
     potatoes: i + 1,
   })).sort(() => Math.random() - 0.5)
+
+  // generate descending sorted list for comparison
+  state.sortedPeople = state.people.slice().sort((a, b) => b.potatoes - a.potatoes)
+}
+
+const checkIfSorted = () => {
+  const isSorted = JSON.stringify(state.people) === JSON.stringify(state.sortedPeople)
+
+  if (isSorted) {
+    clearInterval(interval)
+    state.gameStarted = false
+    state.showSuccessModal = true
+    console.log('Time taken:', state.timer, 'seconds')
+  }
 }
 
 const dropEvent = (targetPerson: Person) => {
-  console.log('drop', targetPerson)
-
   if (state.draggingPerson) {
     const draggingIndex = state.people.indexOf(state.draggingPerson)
     const targetIndex = state.people.indexOf(targetPerson)
@@ -55,7 +81,15 @@ const dropEvent = (targetPerson: Person) => {
     state.people.splice(draggingIndex, 1)
     state.people.splice(targetIndex, 0, state.draggingPerson)
   }
+
+  // check if the people are sorted after each drop event
+  checkIfSorted()
 }
+
+onUnmounted(() => {
+  // clear out interval when component is unmounted
+  if (interval) clearInterval(interval)
+})
 </script>
 
 <template>
@@ -72,12 +106,23 @@ const dropEvent = (targetPerson: Person) => {
         </div>
       </div>
 
+      <div v-if="state.showSuccessModal">
+        <SuccessModal
+          :timer="state.timer"
+          :showModal="state.showSuccessModal"
+          @update:show="state.showSuccessModal = $event"
+        />
+      </div>
+
       <div v-if="state.gameStarted">
         <TableComponent
           :people="state.people"
           @update:dragStart="state.draggingPerson = $event"
           @update:drop="dropEvent($event)"
         />
+      </div>
+      <div v-else class="start-game-text">
+        <p>Click the button above to start the game!</p>
       </div>
     </div>
 
@@ -100,6 +145,12 @@ const dropEvent = (targetPerson: Person) => {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #000000;
+}
+
+.start-game-text {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 20px;
 }
 
 .modal-overlay {
