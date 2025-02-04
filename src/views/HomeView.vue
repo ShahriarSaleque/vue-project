@@ -121,7 +121,7 @@ onUnmounted(() => {
           @update:drop="dropEvent($event)"
         />
       </div>
-      <div v-else class="start-game-text">
+      <div v-if="!state.gameStarted && !state.showSuccessModal" class="start-game-text">
         <p>Click the button above to start the game!</p>
       </div>
     </div>
